@@ -17,10 +17,7 @@ public class MyArrayList<T> implements List<T> {
     public void add(T value) {
 
         if (currentIndex == size) {
-            size = (int) (size * 1.5) + 1;
-            T[] tempList = (T[]) new Object[size];
-            System.arraycopy(list, 0, tempList, 0, currentIndex);
-            list = tempList;
+            extend();
         }
 
         list[currentIndex] = value;
@@ -31,7 +28,15 @@ public class MyArrayList<T> implements List<T> {
     public void add(T value, int index) {
         if (index < 0 || index >= currentIndex)
             throw new IndexOutOfBoundsException();
+
+        if (currentIndex + 1 >= size) {
+            extend();
+        }
+        for (int i = currentIndex; i >= index; i--){
+            list[i + 1] = list[i];
+        }
         list[index] = value;
+        currentIndex++;
     }
 
     @Override
@@ -63,6 +68,13 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public void sort() {
 
+    }
+
+    private void extend(){
+        size = (int) (size * 1.5) + 1;
+        T[] tempList = (T[]) new Object[size];
+        System.arraycopy(list, 0, tempList, 0, currentIndex);
+        list = tempList;
     }
 
     @Override
